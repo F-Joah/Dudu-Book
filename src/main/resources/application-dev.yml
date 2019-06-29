@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/spring_boot?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+
+# mapping-locations:定义mapper.xml文件的路径
+mybatis:
+  mapper-locations: classpath:mybatis/mapping/*Mapping.xml
+  type-aliases-package: com.joah.springboot.user.domain
+
+#showSql
+logging:
+  level:
+    com:
+      example:
+        mapper : debug

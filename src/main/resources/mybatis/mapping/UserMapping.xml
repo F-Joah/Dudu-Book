@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joah.springboot.user.mapper.UserMapper" >
+
+    <resultMap id="BaseResultMap" type="com.joah.springboot.user.domain.User" >
+        <id column="user_id" property="user_id" jdbcType="INTEGER" />
+        <result column="user_name" property="user_name" jdbcType="VARCHAR" />
+        <result column="user_pwd" property="user_pwd" jdbcType="VARCHAR" />
+        <result column="user_sex" property="user_sex" javaType="com.joah.springboot.user.enums.UserSexEnum"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        user_id, user_name, user_pwd, user_sex
+    </sql>
+
+    <sql id="Base_Where_List">
+        <if test="user_name != null  and user_name != ''">
+            and user_name = #{user_name}
+        </if>
+        <if test="user_ses != null and user_ses != ''">
+            and user_sex = #{user_ses}
+        </if>
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM user
+    </select>
+
+    <select id="getList" resultMap="BaseResultMap" parameterType="com.joah.springboot.user.parm.UserParam">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where 1=1
+        <include refid="Base_Where_List" />
+        order by user_id desc
+        limit #{beginLine} , #{pageSize}
+    </select>
+
+    <select id="getCount" resultType="Integer" parameterType="com.joah.springboot.user.parm.UserParam">
+        select
+        count(1)
+        from user
+        where 1=1
+        <include refid="Base_Where_List" />
+    </select>
+
+    <select id="getOne" parameterType="Long" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
+    <insert id="insert" parameterType="com.joah.springboot.user.domain.User" >
+       INSERT INTO
+            user
+            (user_name,user_pwd,user_sex)
+        VALUES
+            (#{user_name}, #{user_pwd}, #{user_sex})
+    </insert>
+
+    <update id="update" parameterType="com.joah.springboot.user.domain.User" >
+        UPDATE
+        user
+        SET
+        <if test="user_name != null">user_name = #{user_name},</if>
+        <if test="user_pwd != null">user_pwd = #{user_pwd},</if>
+        1=1
+        WHERE
+        user_id = #{user_id}
+    </update>
+
+    <delete id="delete" parameterType="Long" >
+       DELETE FROM
+             user
+       WHERE
+             user_id =#{user_id}
+    </delete>
+
+</mapper>
